@@ -1,0 +1,130 @@
+{
+  "subjects": 7,
+  "fitted": 7,
+  "failed": [],
+  "zones": {
+    "chest": {
+      "mean_abs": 0.38,
+      "p90_abs": 0.83,
+      "max_abs": 1.57,
+      "within_2cm": 1.0,
+      "bias": 0.35
+    },
+    "waist": {
+      "mean_abs": 0.32,
+      "p90_abs": 0.73,
+      "max_abs": 1.44,
+      "within_2cm": 1.0,
+      "bias": -0.12
+    },
+    "hip": {
+      "mean_abs": 0.4,
+      "p90_abs": 0.94,
+      "max_abs": 1.69,
+      "within_2cm": 1.0,
+      "bias": 0.4
+    },
+    "thigh": {
+      "mean_abs": 0.81,
+      "p90_abs": 1.71,
+      "max_abs": 2.58,
+      "within_2cm": 0.857,
+      "bias": 0.27
+    },
+    "inseam": {
+      "mean_abs": 1.48,
+      "p90_abs": 2.2,
+      "max_abs": 2.25,
+      "within_2cm": 0.714,
+      "bias": 1.48
+    },
+    "shoulder": {
+      "mean_abs": 1.33,
+      "p90_abs": 1.75,
+      "max_abs": 2.0,
+      "within_2cm": 1.0,
+      "bias": -1.33
+    },
+    "arm": {
+      "mean_abs": 0.67,
+      "p90_abs": 0.93,
+      "max_abs": 1.03,
+      "within_2cm": 1.0,
+      "bias": -0.61
+    },
+    "height": {
+      "mean_abs": 0.2,
+      "p90_abs": 0.34,
+      "max_abs": 0.37,
+      "within_2cm": 1.0,
+      "bias": -0.2
+    },
+    "weight": {
+      "mean_abs": 1.38,
+      "p90_abs": 2.01,
+      "max_abs": 2.05,
+      "within_2cm": 0.857,
+      "bias": -0.82
+    }
+  },
+  "by_sex": {
+    "male": {
+      "chest": {
+        "mean_abs": 0.38,
+        "p90_abs": 0.83,
+        "max_abs": 1.57,
+        "within_2cm": 1.0,
+        "bias": 0.35
+      },
+      "waist": {
+        "mean_abs": 0.32,
+        "p90_abs": 0.73,
+        "max_abs": 1.44,
+        "within_2cm": 1.0,
+        "bias": -0.12
+      },
+      "hip": {
+        "mean_abs": 0.4,
+        "p90_abs": 0.94,
+        "max_abs": 1.69,
+        "within_2cm": 1.0,
+        "bias": 0.4
+      }
+    },
+    "female": {}
+  },
+  "subjects_passing_gate": 1.0,
+  "worst": [
+    {
+      "id": "M08",
+      "chest": 1.57,
+      "waist": -1.44,
+      "hip": 1.69
+    },
+    {
+      "id": "M03",
+      "chest": 0.14,
+      "waist": -0.12,
+      "hip": 0.44
+    },
+    {
+      "id": "M04",
+      "chest": 0.33,
+      "waist": 0.1,
+      "hip": 0.2
+    },
+    {
+      "id": "M02",
+      "chest": 0.3,
+      "waist": 0.23,
+      "hip": 0.01
+    },
+    {
+      "id": "M06",
+      "chest": 0.08,
+      "waist": 0.25,
+      "hip": 0.08
+    }
+  ],
+  "seconds_per_fit": 86.0
+}

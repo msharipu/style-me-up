@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.expo/
+web-build/
+*.log
+__pycache__/
+*.pyc
+.env
+.env.*
+# Volunteer photos never go in the repo.
+volunteers/
+*.jpg
+*.jpeg
+*.heic
