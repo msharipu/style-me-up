@@ -15,9 +15,14 @@ import { Avatar, CameraRig } from "./src/Avatar";
 import { Canvas } from "./src/three/fiber";
 import { heatToRgb, rgbToCss, VERDICT_LABEL } from "./src/heat";
 import { SAMPLES } from "./src/samples";
-import avatarInfo from "./assets/avatar.json";
+import maleInfo from "./assets/avatar.json";
+import femaleInfo from "./assets/avatar-f.json";
 
-const body = avatarInfo.measurements as BodyMeasurements;
+/** Sample avatars fitted from tape measurements with spike/body-fit/make_avatar.py. */
+const AVATARS = [
+  { id: "m", label: "Sample man", glb: require("./assets/avatar.glb"), body: maleInfo.measurements as BodyMeasurements },
+  { id: "f", label: "Sample woman", glb: require("./assets/avatar-f.glb"), body: femaleInfo.measurements as BodyMeasurements },
+];
 const ZONE_NAME: Record<Zone, string> = {
   chest: "Chest",
   waist: "Waist",
@@ -30,9 +35,12 @@ const ZONE_NAME: Record<Zone, string> = {
 };
 
 export default function App() {
+  const [avatarId, setAvatarId] = useState(AVATARS[0].id);
+  const avatar = AVATARS.find((a) => a.id === avatarId)!;
+  const body = avatar.body;
   const [garmentId, setGarmentId] = useState(SAMPLES[0].id);
   const garment = SAMPLES.find((g) => g.id === garmentId)!;
-  const report = useMemo(() => checkFit(garment.chart, body), [garment]);
+  const report = useMemo(() => checkFit(garment.chart, body), [garment, body]);
   const [picked, setPicked] = useState<string | null>(null);
   const sizeLabel = picked && report.sizes.some((s) => s.label === picked) ? picked : report.recommended ?? report.sizes[0].label;
   const size = report.sizes.find((s) => s.label === sizeLabel)!;
@@ -64,8 +72,15 @@ export default function App() {
         <View style={s.header}>
           <Text style={s.brand}>Style Me Up!</Text>
           <Text style={s.sub}>
-            Avatar {body.height} cm · chest {body.chest} · waist {body.waist} · hip {body.hip}
+            {body.height} cm · chest {body.chest} · waist {body.waist} · hip {body.hip}
           </Text>
+          <View style={[s.row, { marginTop: 10 }]}>
+            {AVATARS.map((a) => (
+              <Chip key={a.id} active={a.id === avatarId} onPress={() => { setAvatarId(a.id); setPicked(null); }}>
+                {a.label}
+              </Chip>
+            ))}
+          </View>
         </View>
 
         <View style={s.stage} {...pan.panHandlers}>
@@ -75,7 +90,7 @@ export default function App() {
             <directionalLight position={[2, 4, 3]} intensity={1.6} />
             <directionalLight position={[-3, 2, -2]} intensity={0.5} />
             <Suspense fallback={null}>
-              <Avatar source={require("./assets/avatar.glb")} zoneHeat={zoneHeat} rotation={rotation} />
+              <Avatar key={avatar.id} source={avatar.glb} zoneHeat={zoneHeat} rotation={rotation} />
             </Suspense>
           </Canvas>
           <Text style={s.hint}>Drag to turn</Text>

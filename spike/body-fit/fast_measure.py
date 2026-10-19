@@ -93,21 +93,26 @@ def pick_landmark_vertices(verts: np.ndarray, lm) -> dict[str, int]:
     mid = np.abs(verts[:, 0]) < 0.012
     idx = np.where(mid)[0]
 
-    def nearest(z, front: bool):
-        cand = idx[np.abs(verts[idx, 2] - z) < 0.02]
-        # Front surface (most negative Y) for chest and waist, back (most positive Y) for hip.
-        y = verts[cand, 1]
-        cand = cand[(y < np.percentile(y, 30)) if front else (y > np.percentile(y, 70))]
-        return int(cand[np.argmin(np.abs(verts[cand, 2] - z))])
+    def front_midline(z):
+        # Front surface (most negative Y) of the midline near height z (sternum, navel line).
+        for tol in (0.02, 0.04, 0.08):
+            cand = idx[np.abs(verts[idx, 2] - z) < tol]
+            if len(cand) == 0:
+                continue
+            y = verts[cand, 1]
+            cand = cand[y <= np.percentile(y, 30)]
+            if len(cand):
+                return int(cand[np.argmin(np.abs(verts[cand, 2] - z))])
+        raise RuntimeError(f"No midline vertex near z={z:.3f}")
+
+    # Hip: the buttock's most prominent vertex (the back midline sits in the crease, so it can't be used).
+    height = verts[:, 2].max() - verts[:, 2].min()
+    band = np.where((verts[:, 2] > lm.crotch + 0.01) & (verts[:, 2] < lm.crotch + 0.15 * height) & (np.abs(verts[:, 0]) < 0.12))[0]
+    hip = int(band[np.argmax(verts[band, 1])])
 
     torso_mid = idx[(verts[idx, 2] > lm.crotch - 0.05) & (verts[idx, 2] < lm.hip)]
     crotch = int(torso_mid[np.argmin(np.abs(verts[torso_mid, 2] - lm.crotch))])
-    return dict(
-        chest=nearest(lm.chest, front=True),
-        waist=nearest(lm.waist, front=True),
-        hip=nearest(lm.hip, front=False),
-        crotch=crotch,
-    )
+    return dict(chest=front_midline(lm.chest), waist=front_midline(lm.waist), hip=hip, crotch=crotch)
 
 
 def fast_measure(verts, topo: Topology, ids: dict[str, int], bones: dict[str, float]) -> dict[str, float]:

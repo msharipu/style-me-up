@@ -1,0 +1,62 @@
+{
+  "sex": "female",
+  "measurements": {
+    "height": 158.1,
+    "chest": 86.3,
+    "waist": 70.0,
+    "hip": 95.1,
+    "thigh": 55.3,
+    "inseam": 70.9,
+    "shoulder": 36.4,
+    "arm": 51.8
+  },
+  "target": {
+    "height": 158.0,
+    "chest": 86.0,
+    "waist": 70.0,
+    "hip": 95.0,
+    "thigh": 55.0,
+    "inseam": 71.0,
+    "shoulder": 37.0,
+    "arm": 53.0,
+    "weight": 54.0
+  },
+  "errors_cm": {
+    "height": 0.05,
+    "chest": 0.28,
+    "waist": 0.04,
+    "hip": 0.13,
+    "thigh": 0.28,
+    "inseam": -0.08,
+    "shoulder": -0.58,
+    "arm": -1.23,
+    "weight": -1.98
+  },
+  "model": {
+    "name": "Anny",
+    "license": "Apache-2.0",
+    "phenotype": {
+      "gender": 1.0,
+      "age": 0.6820512820512821,
+      "muscle": 0.46921103246720625,
+      "weight": 0.5709472612994896,
+      "height": 0.35267800335944904,
+      "proportions": 0.6585326736231639
+    },
+    "local_changes": {
+      "measure-bust-circ-incr": -0.0549,
+      "measure-underbust-circ-incr": -0.007,
+      "measure-waist-circ-incr": 0.024,
+      "measure-hips-circ-incr": 0.0181,
+      "measure-thigh-circ-incr": -0.0439,
+      "measure-shoulder-dist-incr": 0.2129,
+      "measure-upperleg-height-incr": -0.1898,
+      "measure-lowerleg-height-incr": -0.1745,
+      "measure-upperarm-length-incr": 0.361,
+      "measure-lowerarm-length-incr": 0.3219,
+      "stomach-pregnant-incr": 0.0316,
+      "buttocks-volume-incr": 0.0174,
+      "torso-scale-depth-incr": 0.0149
+    }
+  }
+}

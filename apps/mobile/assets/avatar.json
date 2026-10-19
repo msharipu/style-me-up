@@ -11,15 +11,15 @@
     "arm": 59.5
   },
   "target": {
-    "height": 175,
-    "chest": 96,
-    "waist": 82,
-    "hip": 96,
-    "thigh": 56,
-    "inseam": 80,
-    "shoulder": 45,
-    "arm": 60,
-    "weight": 70
+    "height": 175.0,
+    "chest": 96.0,
+    "waist": 82.0,
+    "hip": 96.0,
+    "thigh": 56.0,
+    "inseam": 80.0,
+    "shoulder": 45.0,
+    "arm": 60.0,
+    "weight": 70.0
   },
   "errors_cm": {
     "height": -0.1,
@@ -38,10 +38,10 @@
     "phenotype": {
       "gender": 0.0,
       "age": 0.7025641025641025,
-      "muscle": 0.9537833378381678,
-      "weight": 0.4972075873875318,
-      "height": 0.4175145914145623,
-      "proportions": 0.562383002519652
+      "muscle": 0.953783338172815,
+      "weight": 0.49720758764836426,
+      "height": 0.41751459136538993,
+      "proportions": 0.5623830028380071
     },
     "local_changes": {
       "measure-bust-circ-incr": -0.2889,

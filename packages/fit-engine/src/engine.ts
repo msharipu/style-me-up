@@ -82,13 +82,13 @@ function judgeCircumference(
     deviation = -(range.min - ease) / (tTol * 1.5);
     if (ease < range.min - grace) {
       verdict = ease < range.min - tTol ? "too-tight" : "snug";
-      heat = -clamp(-deviation, 0.15, 1);
+      heat = -clamp(-deviation, 0.35, 1);
     }
   } else if (ease > range.max) {
     deviation = (ease - range.max) / (lTol * 1.5);
     if (ease > range.max + grace) {
       verdict = ease > range.max + lTol ? "too-loose" : "roomy";
-      heat = clamp(deviation, 0.15, 1);
+      heat = clamp(deviation, 0.35, 1);
     }
   }
   const name = zone === "shoulder" ? "shoulders" : zone;
@@ -116,13 +116,13 @@ function judgeLength(
     deviation = -(range.min - delta) / (tol * 1.5);
     if (delta < range.min - grace) {
       verdict = delta < range.min - tol ? "too-short" : "short";
-      heat = -clamp(-deviation, 0.15, 1);
+      heat = -clamp(-deviation, 0.35, 1);
     }
   } else if (delta > range.max) {
     deviation = (delta - range.max) / (tol * 3);
     if (delta > range.max + grace) {
       verdict = delta > range.max + tol * 2 ? "too-long" : "long";
-      heat = clamp(deviation, 0.15, 1);
+      heat = clamp(deviation, 0.35, 1);
     }
   }
   const what = zone === "length" ? "Length" : zone === "sleeve" ? "Sleeves" : "Leg length";
@@ -153,13 +153,13 @@ function judgeBodyChart(
     deviation = -(body - range.max) / 6;
     if (body > range.max + 1) {
       verdict = body > range.max + 4 ? "too-tight" : "snug";
-      heat = -clamp(-deviation, 0.15, 1);
+      heat = -clamp(-deviation, 0.35, 1);
     }
   } else if (body < range.min) {
     deviation = (range.min - body) / 8;
     if (body < range.min - 1) {
       verdict = body < range.min - 5 ? "too-loose" : "roomy";
-      heat = clamp(deviation, 0.15, 1);
+      heat = clamp(deviation, 0.35, 1);
     }
   }
   const name = zone === "shoulder" ? "shoulders" : zone;

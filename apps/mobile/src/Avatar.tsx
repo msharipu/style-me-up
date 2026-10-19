@@ -1,4 +1,4 @@
-import { useEffect, useMemo, type MutableRefObject } from "react";
+import { useEffect, useMemo, useRef, type MutableRefObject } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import type { Zone } from "@stylemeup/fit-engine";
@@ -18,8 +18,7 @@ export function Avatar({ source, zoneHeat, rotation }: Props) {
   const gltf = useLoader(GLTFLoader, source as string);
 
   // One mesh, one material with vertex colours, so the heatmap is a single attribute write.
-  const { mesh, group } = useMemo(() => {
-    const group = new THREE.Group();
+  const mesh = useMemo(() => {
     let mesh: THREE.Mesh | undefined;
     gltf.scene.traverse((o) => {
       if (!mesh && (o as THREE.Mesh).isMesh) mesh = o as THREE.Mesh;
@@ -32,9 +31,9 @@ export function Avatar({ source, zoneHeat, rotation }: Props) {
     }
     if (!geom.getAttribute("normal")) geom.computeVertexNormals();
     mesh.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.75, metalness: 0 });
-    group.add(mesh.clone());
-    return { mesh: group.children[0] as THREE.Mesh, group };
+    return mesh.clone();
   }, [gltf]);
+  const group = useRef<THREE.Group>(null);
 
   useEffect(() => {
     const geom = mesh.geometry as THREE.BufferGeometry;
@@ -50,10 +49,15 @@ export function Avatar({ source, zoneHeat, rotation }: Props) {
 
   useFrame(() => {
     // Ease toward the target rotation so drags feel smooth.
-    group.rotation.y += (rotation.current - group.rotation.y) * 0.2;
+    const g = group.current;
+    if (g) g.rotation.y += (rotation.current - g.rotation.y) * 0.2;
   });
 
-  return <primitive object={group} />;
+  return (
+    <group ref={group}>
+      <primitive object={mesh} />
+    </group>
+  );
 }
 
 /** Points the camera at the avatar's middle (R3F cameras look at the origin by default). */
