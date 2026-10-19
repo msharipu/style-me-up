@@ -14,18 +14,26 @@ from body import Body
 from fit import fit
 from subjects import make_subjects
 
-ZONES = ["height", "chest", "waist", "hip", "thigh", "inseam", "shoulder", "arm", "weight"]
+ZONES = ["height", "chest", "waist", "waist_navel", "hip", "thigh", "inseam", "shoulder", "arm", "weight"]
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--shard", type=int, default=0)
     ap.add_argument("--of", type=int, default=1)
+    ap.add_argument("--set", choices=["synthetic", "ansur"], default="synthetic")
     args = ap.parse_args()
-    os.makedirs("results", exist_ok=True)
-    subjects = make_subjects()[args.shard :: args.of]
+    out_dir = "results" if args.set == "synthetic" else "results_ansur"
+    os.makedirs(out_dir, exist_ok=True)
+    if args.set == "ansur":
+        from ansur import sample
+
+        subjects = sample()
+    else:
+        subjects = make_subjects()
+    subjects = subjects[args.shard :: args.of]
     body = Body()
-    path = f"results/benchmark_{args.shard}.jsonl"
+    path = f"{out_dir}/benchmark_{args.shard}.jsonl"
     done = set()
     if os.path.exists(path):
         done = {json.loads(l)["id"] for l in open(path)}
@@ -33,10 +41,10 @@ def main():
         for s in subjects:
             if s["id"] in done:
                 continue
-            target = {z: s[z] for z in ZONES}
+            target = {z: s[z] for z in ZONES if z in s}
             try:
                 r = fit(body, target, s["sex"], s["age"])
-                row = dict(id=s["id"], sex=s["sex"], age=s["age"], target=target, measured=r.measured,
+                row = dict(id=s["id"], sex=s["sex"], age=s["age"], asian=s.get("asian"), target=target, measured=r.measured,
                            errors=r.errors, seconds=r.seconds, pheno=r.pheno, local=r.local)
             except Exception as e:  # keep going; a failed fit is itself a result
                 row = dict(id=s["id"], sex=s["sex"], target=target, error=repr(e))

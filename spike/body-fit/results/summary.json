@@ -2,6 +2,11 @@
   "subjects": 40,
   "fitted": 40,
   "failed": [],
+  "gate_zones": [
+    "chest",
+    "waist",
+    "hip"
+  ],
   "zones": {
     "chest": {
       "mean_abs": 0.39,
@@ -115,6 +120,7 @@
       }
     }
   },
+  "by_group": {},
   "subjects_passing_gate": 0.95,
   "worst": [
     {

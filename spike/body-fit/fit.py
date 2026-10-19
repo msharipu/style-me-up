@@ -21,7 +21,7 @@ from body import LOCAL, Body, age_param
 GLOBAL = ["muscle", "weight", "height", "proportions"]
 
 # How much each centimetre of error matters in the fit.
-ZONE_WEIGHT = dict(height=2.0, chest=1.0, waist=1.0, hip=1.0, thigh=0.7, inseam=1.0, shoulder=0.7, arm=0.5)
+ZONE_WEIGHT = dict(height=2.0, chest=1.0, waist=1.0, waist_navel=1.0, hip=1.0, thigh=0.7, inseam=1.0, shoulder=0.7, arm=0.5)
 WEIGHT_PER_KG = 0.3
 LOCAL_REG = 2.5  # cm-equivalent penalty per unit of each local control
 
@@ -105,17 +105,17 @@ def fit(body: Body, target: dict[str, float], sex: str, age_years: float | None 
     # Stage 3: correct the fast-vs-exact measurement bias, then refine.
     p, l = split(s2.x)
     v, j = body.build(p, l)
-    exact, _ = body.measure(v, j)
+    exact, _ = body.measure(v, j, gender=gender)
     fast = body.quick_measure(v, j, gender, with_weight=use_weight)
     shifted = dict(target)
-    for z in ("chest", "waist", "hip", "thigh", "inseam"):
+    for z in ("chest", "waist", "waist_navel", "hip", "thigh", "inseam"):
         if z in target and np.isfinite(exact[z]) and np.isfinite(fast[z]):
             shifted[z] = target[z] - (exact[z] - fast[z])
     s3 = least_squares(make_f2(shifted), s2.x, bounds=(lo, hi), diff_step=0.02, max_nfev=80, xtol=1e-4)
 
     p, l = split(s3.x)
     v, j = body.build(p, l)
-    measured, lm = body.measure(v, j)
+    measured, lm = body.measure(v, j, gender=gender)
     errors = {z: round(measured[z] - target[z], 2) for z in target if z in measured}
     return FitResult(
         pheno=p,
