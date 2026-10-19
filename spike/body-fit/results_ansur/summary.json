@@ -1,0 +1,171 @@
+{
+  "subjects": 19,
+  "fitted": 19,
+  "failed": [],
+  "gate_zones": [
+    "chest",
+    "waist_navel",
+    "hip"
+  ],
+  "zones": {
+    "chest": {
+      "mean_abs": 0.25,
+      "p90_abs": 0.48,
+      "max_abs": 1.31,
+      "within_2cm": 1.0,
+      "bias": 0.23
+    },
+    "waist_navel": {
+      "mean_abs": 0.16,
+      "p90_abs": 0.39,
+      "max_abs": 0.5,
+      "within_2cm": 1.0,
+      "bias": 0.12
+    },
+    "hip": {
+      "mean_abs": 0.47,
+      "p90_abs": 1.01,
+      "max_abs": 1.87,
+      "within_2cm": 1.0,
+      "bias": 0.42
+    },
+    "thigh": {
+      "mean_abs": 0.53,
+      "p90_abs": 1.22,
+      "max_abs": 1.67,
+      "within_2cm": 1.0,
+      "bias": -0.03
+    },
+    "inseam": {
+      "mean_abs": 0.37,
+      "p90_abs": 0.7,
+      "max_abs": 0.78,
+      "within_2cm": 1.0,
+      "bias": 0.01
+    },
+    "height": {
+      "mean_abs": 0.05,
+      "p90_abs": 0.08,
+      "max_abs": 0.22,
+      "within_2cm": 1.0,
+      "bias": 0.02
+    },
+    "weight": {
+      "mean_abs": 3.01,
+      "p90_abs": 6.38,
+      "max_abs": 8.93,
+      "within_2cm": 0.368,
+      "bias": -2.99
+    }
+  },
+  "by_sex": {
+    "male": {
+      "chest": {
+        "mean_abs": 0.25,
+        "p90_abs": 0.48,
+        "max_abs": 1.31,
+        "within_2cm": 1.0,
+        "bias": 0.23
+      },
+      "waist_navel": {
+        "mean_abs": 0.16,
+        "p90_abs": 0.39,
+        "max_abs": 0.5,
+        "within_2cm": 1.0,
+        "bias": 0.12
+      },
+      "hip": {
+        "mean_abs": 0.47,
+        "p90_abs": 1.01,
+        "max_abs": 1.87,
+        "within_2cm": 1.0,
+        "bias": 0.42
+      }
+    },
+    "female": {}
+  },
+  "by_group": {
+    "asian": {
+      "chest": {
+        "mean_abs": 0.28,
+        "p90_abs": 0.69,
+        "max_abs": 1.31,
+        "within_2cm": 1.0,
+        "bias": 0.26
+      },
+      "waist_navel": {
+        "mean_abs": 0.19,
+        "p90_abs": 0.41,
+        "max_abs": 0.5,
+        "within_2cm": 1.0,
+        "bias": 0.14
+      },
+      "hip": {
+        "mean_abs": 0.44,
+        "p90_abs": 0.81,
+        "max_abs": 1.87,
+        "within_2cm": 1.0,
+        "bias": 0.37
+      },
+      "passing_gate": 1.0
+    },
+    "other": {
+      "chest": {
+        "mean_abs": 0.15,
+        "p90_abs": 0.22,
+        "max_abs": 0.23,
+        "within_2cm": 1.0,
+        "bias": 0.12
+      },
+      "waist_navel": {
+        "mean_abs": 0.06,
+        "p90_abs": 0.09,
+        "max_abs": 0.09,
+        "within_2cm": 1.0,
+        "bias": 0.03
+      },
+      "hip": {
+        "mean_abs": 0.58,
+        "p90_abs": 1.06,
+        "max_abs": 1.12,
+        "within_2cm": 1.0,
+        "bias": 0.58
+      },
+      "passing_gate": 1.0
+    }
+  },
+  "subjects_passing_gate": 1.0,
+  "worst": [
+    {
+      "id": "MA06",
+      "chest": 0.9,
+      "waist_navel": 0.17,
+      "hip": 1.87
+    },
+    {
+      "id": "MA07",
+      "chest": 1.31,
+      "waist_navel": 0.3,
+      "hip": 0.23
+    },
+    {
+      "id": "MO03",
+      "chest": 0.09,
+      "waist_navel": 0.09,
+      "hip": 1.12
+    },
+    {
+      "id": "MA15",
+      "chest": 0.2,
+      "waist_navel": -0.08,
+      "hip": 0.98
+    },
+    {
+      "id": "MO02",
+      "chest": 0.23,
+      "waist_navel": 0.09,
+      "hip": 0.93
+    }
+  ],
+  "seconds_per_fit": 94.0
+}

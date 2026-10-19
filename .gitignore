@@ -12,3 +12,7 @@ volunteers/
 *.jpg
 *.jpeg
 *.heic
+
+# BodyM is non-commercial (internal evaluation only): never commit it.
+spike/body-fit/data/bodym/
+spike/body-fit/results_bodym/*.jsonl

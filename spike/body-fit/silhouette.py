@@ -39,8 +39,12 @@ def mask_profile(mask: np.ndarray, height_cm: float, view: str, levels=LEVELS) -
     px_per_cm = (bottom - top) / height_cm
     cols = np.where(mask.any(axis=0))[0]
     centre = mask[top : bottom + 1].nonzero()[1].mean()
+    armpit_f = _armpit_fraction(mask, top, bottom, centre) if view == "front" else 1.0
     out = []
     for f in levels:
+        if f > armpit_f - 0.015:  # arms merge with the torso above here; the width would include them
+            out.append(np.nan)
+            continue
         r = int(round(bottom - f * (bottom - top)))
         line = mask[r]
         runs = _runs(line)
@@ -67,6 +71,21 @@ def mask_profile(mask: np.ndarray, height_cm: float, view: str, levels=LEVELS) -
     return np.array(out)
 
 
+def _armpit_fraction(mask, top, bottom, centre) -> float:
+    """Highest level (fraction of stature) where the arms are still separate from the torso:
+    scanning up from mid-body, the last row with a torso run plus a run on each side."""
+    best = 0.0
+    for f in np.arange(0.45, 0.85, 0.005):
+        r = int(round(bottom - f * (bottom - top)))
+        runs = _runs(mask[r])
+        torso = [ru for ru in runs if ru[0] <= centre <= ru[1]]
+        if torso and any(ru[1] < torso[0][0] for ru in runs) and any(ru[0] > torso[0][1] for ru in runs):
+            best = f
+        elif best > 0.55:
+            break
+    return best
+
+
 def _runs(line: np.ndarray) -> list[tuple[int, int]]:
     d = np.diff(np.concatenate([[0], line.astype(np.int8), [0]]))
     starts, ends = np.where(d == 1)[0], np.where(d == -1)[0] - 1
@@ -86,32 +105,28 @@ def _merge(intervals):
 
 
 def mesh_profile(verts: np.ndarray, topo, levels=LEVELS) -> tuple[np.ndarray, np.ndarray]:
-    """(front width, side depth) at each level, in cm, read exactly as from a silhouette.
+    """(front width, side depth) of the torso, or both upper legs together, at each level, in cm.
 
-    An orthographic silhouette row at height z is the union of every cross-section at z projected
-    onto the image axis, arms included, so we build it that way and apply the same run rules
-    as mask_profile.
+    Arms are left out on purpose: in the front photo we only use levels below the armpit, where
+    the arms are separate, and in the side photo the arms hang inside the torso outline (the
+    capture guide asks for arms relaxed at the sides), so the outline is the torso's.
     """
     floor, top = verts[:, 2].min(), verts[:, 2].max()
     h = top - floor
     widths, depths = [], []
     for f in levels:
-        loops = [g for g in plane_loops(verts, topo, floor + f * h) if len(g) > 3]
-        if not loops:
-            widths.append(np.nan); depths.append(np.nan)
-            continue
-        xs = _merge([(g[:, 0].min(), g[:, 0].max()) for g in loops])
-        ys = _merge([(g[:, 1].min(), g[:, 1].max()) for g in loops])
-        centre = 0.0
-        hit = [r for r in xs if r[0] <= centre <= r[1]]
-        if hit:
-            w = hit[0][1] - hit[0][0]
+        loops = [g for g in plane_loops(verts, topo, floor + f * h) if len(g) > 10]
+        torso = [g for g in loops if _straddles(g)]
+        if torso:
+            g = max(torso, key=len)
         else:
-            left = [r for r in xs if r[1] < centre]
-            right = [r for r in xs if r[0] > centre]
-            w = (right[0][1] - left[-1][0]) if left and right else np.nan
-        widths.append(w * 100)
-        depths.append(max(b - a for a, b in ys) * 100)
+            legs = [g for g in loops if abs(g[:, 0].mean()) < 0.2]
+            if len(legs) < 2:
+                widths.append(np.nan); depths.append(np.nan)
+                continue
+            g = np.concatenate(sorted(legs, key=len)[-2:])
+        widths.append((g[:, 0].max() - g[:, 0].min()) * 100)
+        depths.append((g[:, 1].max() - g[:, 1].min()) * 100)
     return np.array(widths), np.array(depths)
 
 
@@ -171,11 +186,13 @@ def fit_silhouettes(body: Body, front: np.ndarray, side: np.ndarray, height_cm: 
     def residuals_global(xg):
         return residuals(np.concatenate([xg, np.zeros(len(LOCAL))]))[: -len(LOCAL)]
 
-    s1 = least_squares(residuals_global, [0.5, 0.5, x_h, 0.5], bounds=(0, 1), diff_step=0.02, max_nfev=80, xtol=1e-5)
+    s1 = least_squares(residuals_global, [0.5, 0.5, x_h, 0.5], bounds=(0, 1), diff_step=0.02, max_nfev=80, xtol=1e-5,
+                       loss="soft_l1", f_scale=1.5)
     lo = [0] * n_g + [-1] * len(LOCAL)
     hi = [1] * n_g + [1] * len(LOCAL)
     x0 = np.concatenate([s1.x, np.zeros(len(LOCAL))])
-    s = least_squares(residuals, x0, bounds=(lo, hi), diff_step=0.02, max_nfev=250, xtol=1e-5)
+    s = least_squares(residuals, x0, bounds=(lo, hi), diff_step=0.02, max_nfev=250, xtol=1e-5,
+                      loss="soft_l1", f_scale=1.5)
     p, l = split(s.x)
     v, j = body.build(p, l)
     measured, lm = body.measure(v, j, gender=gender)
