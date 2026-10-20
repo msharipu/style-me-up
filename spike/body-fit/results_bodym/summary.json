@@ -1,0 +1,49 @@
+{
+  "subjects": 87,
+  "fitted": 87,
+  "zones": {
+    "chest": {
+      "mean_abs": 7.58,
+      "median": 7.31,
+      "within_2cm": 0.149,
+      "too_big": 69,
+      "too_small": 5
+    },
+    "waist": {
+      "mean_abs": 4.11,
+      "median": -2.8,
+      "within_2cm": 0.264,
+      "too_big": 14,
+      "too_small": 50
+    },
+    "waist_navel": {
+      "mean_abs": 4.05,
+      "median": -0.92,
+      "within_2cm": 0.322,
+      "too_big": 22,
+      "too_small": 37
+    },
+    "hip": {
+      "mean_abs": 5.08,
+      "median": -4.29,
+      "within_2cm": 0.23,
+      "too_big": 3,
+      "too_small": 64
+    },
+    "thigh": {
+      "mean_abs": 3.35,
+      "median": 2.43,
+      "within_2cm": 0.299,
+      "too_big": 53,
+      "too_small": 8
+    },
+    "height": {
+      "mean_abs": 1.71,
+      "median": -1.21,
+      "within_2cm": 0.736,
+      "too_big": 1,
+      "too_small": 22
+    }
+  },
+  "passing_gate": 0.0
+}
